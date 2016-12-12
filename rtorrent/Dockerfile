@@ -1,4 +1,7 @@
 FROM diameter/rtorrent-rutorrent:stable
-COPY rutorrent-basic.nginx /root/rutorrent-basic.nginx
-COPY rutorrent-tls.nginx /root/rutorrent-tls.nginx
+COPY patch.sed /root/
 
+RUN cd /root && \
+    sed -f patch.sed -i rutorrent-basic.nginx && \
+    sed -f patch.sed -i rutorrent-tls.nginx && \
+    rm patch.sed
