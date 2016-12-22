@@ -1,36 +1,41 @@
 version: '2'
 services:
+
   rtorrent:
     build: ./rtorrent
     volumes:
-      - /docker/downloads/:/downloads
+      - ${DOWNLOAD_DIR}:/downloads
     ports:
       - "80:80"
       - "443:443"
       - "49160:49160/udp"
       - "49161:49161"
+    expose:
+      - "5000"
+
   sickrage:
     build: ./sickrage
     volumes:
-      - /docker/sickrage:/config
-      - /docker/downloads:/downloads
-      - /tv-shows:/tv
+      - ${SICKRAGE_CONFIG}:/config
+      - ${DOWNLOAD_DIR}:/downloads
+      - ${TV_DIR}:/tv
     expose:
       - "8081"
     environment:
-      PGID: 20
-      PUID: 1026
-      TZ: BRT
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TZ}
+
   couchpotato:
     build: ./couchpotato
     volumes:
-      - /docker/couchpotato:/config
-      - /docker/downloads:/downloads
-      - /movies:/movies
+      - ${COUCHPOTATO_CONFIG}:/config
+      - ${DOWNLOAD_DIR}:/downloads
+      - ${MOVIES_DIR}:/movies
     expose:
       - "5050"
     environment:
-      PGID: 20
-      PUID: 1026
-      TZ: BRT
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TZ}
 
