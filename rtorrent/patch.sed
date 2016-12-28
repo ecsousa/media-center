@@ -10,6 +10,9 @@
 
 
 /location \/RPC2 {/,/}/ {
+  /}/i\
+        client_max_body_size 20M;
+
   /}/a\
 \
         location /sickrage {\
