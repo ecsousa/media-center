@@ -12,3 +12,4 @@ RUN cd /app && \
   cd sickrage && \
   git init
 
+COPY update-kodi-library.sh /root/

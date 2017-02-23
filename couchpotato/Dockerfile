@@ -13,4 +13,4 @@ RUN cd /app && \
   cd couchpotato && \
   git init
 
-
+COPY update-kodi-library.sh /root/
