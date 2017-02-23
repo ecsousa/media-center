@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
 
   rtorrent:
@@ -31,6 +31,12 @@ services:
       KODI_USER: ${KODI_USER}
       KODI_PASSWORD: ${KODI_PASSWORD}
 
+    healthcheck:
+      test: ["[", "-f", "/tv/.health", "]"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
   couchpotato:
     build: ./couchpotato
     volumes:
@@ -48,4 +54,10 @@ services:
       KODI_PORT: ${KODI_PORT}
       KODI_USER: ${KODI_USER}
       KODI_PASSWORD: ${KODI_PASSWORD}
+
+    healthcheck:
+      test: ["[", "-f", "/movies/.health", "]"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
