@@ -7,7 +7,7 @@
     /auth_basic_user_file/d
 }
 
-
+/server_name/d
 
 /location \/RPC2 {/,/}/ {
   /}/i\
