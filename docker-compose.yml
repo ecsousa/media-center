@@ -4,20 +4,17 @@ services:
 
   mysql:
     image: mysql
-
     ports:
       - 3306:3306
-
     volumes:
-      - /docker/mysql:/var/lib/mysql:nocopy
-
+      - ${MYSQL_DATA}/var/lib/mysql
     environment:
-      MYSQL_ROOT_PASSWORD: mypasswd
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 
   rtorrent:
     build: ./rtorrent
     volumes:
-      - ${DOWNLOAD_DIR}:/downloads:nocopy
+      - ${DOWNLOAD_DIR}:/downloads
     ports:
       - "80:80"
       - "443:443"
@@ -26,39 +23,44 @@ services:
     expose:
       - "5000"
 
-  sickrage:
-    build: ./sickrage
+  jackett:
+    image: linuxserver/jackett
     volumes:
-      - ${SICKRAGE_CONFIG}:/config:nocopy
-      - ${DOWNLOAD_DIR}:/downloads:nocopy
+      - /etc/localtime:/etc/localtime:ro
+      - ${JACKETT_CONFIG}:/config
+      - ${BLACKHOLE_DIR}:/downloads
+    expose:
+      - "9117"
+    environment:
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TZ}
+
+  sonarr:
+    image: linuxserver/sonarr
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${SONARR_CONFIG}:/config
+      - ${DOWNLOAD_DIR}:/downloads
       - ${TV_DIR}:/tv:nocopy
     expose:
-      - "8081"
+      - "8989"
     environment:
       PGID: ${PGID}
       PUID: ${PUID}
       TZ: ${TZ}
 
-      KODI_HOST: ${KODI_HOST}
-      KODI_PORT: ${KODI_PORT}
-      KODI_USER: ${KODI_USER}
-      KODI_PASSWORD: ${KODI_PASSWORD}
-
-  couchpotato:
-    build: ./couchpotato
+  radarr:
+    image: linuxserver/radarr
     volumes:
-      - ${COUCHPOTATO_CONFIG}:/config:nocopy
-      - ${DOWNLOAD_DIR}:/downloads:nocopy
+      - /etc/localtime:/etc/localtime:ro
+      - ${RADARR_CONFIG}:/config
+      - ${DOWNLOAD_DIR}:/downloads
       - ${MOVIES_DIR}:/movies:nocopy
     expose:
-      - "5050"
+      - "7878"
     environment:
       PGID: ${PGID}
       PUID: ${PUID}
       TZ: ${TZ}
-
-      KODI_HOST: ${KODI_HOST}
-      KODI_PORT: ${KODI_PORT}
-      KODI_USER: ${KODI_USER}
-      KODI_PASSWORD: ${KODI_PASSWORD}
 

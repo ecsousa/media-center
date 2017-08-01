@@ -22,6 +22,27 @@
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\
         }\
 \
+        location /jackett {\
+            proxy_pass http://jackett:9117;\
+            proxy_set_header Host $host;\
+            proxy_set_header X-Real-IP $remote_addr;\
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\
+        }\
+\
+        location /sonarr {\
+            proxy_pass http://sonarr:8989;\
+            proxy_set_header Host $host;\
+            proxy_set_header X-Real-IP $remote_addr;\
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\
+        }\
+\
+        location /radarr {\
+            proxy_pass http://radarr:7878;\
+            proxy_set_header Host $host;\
+            proxy_set_header X-Real-IP $remote_addr;\
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\
+        }\
+\
         location /couchpotato {\
             proxy_pass http://couchpotato:5050;\
             proxy_set_header Host $host;\
