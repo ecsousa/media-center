@@ -1,22 +1,13 @@
-version: '3'
+version: '2'
 
 services:
-
-  mysql:
-    image: mysql
-    ports:
-      - 3306:3306
-    volumes:
-      - ${MYSQL_DATA}:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
 
   nginx:
     image: linuxserver/nginx
     ports:
       - "443:443"
     volumes:
-      - /docker/nginx:/config
+      - ${NGINX_CONFIG}:/config
       - ./nginx/default:/defaults/default
       - ./nginx/default.d:/etc/nginx/default.d
     environment:
@@ -33,7 +24,7 @@ services:
       - "80"
       - "5000"
     volumes:
-      - /docker/rutorrent:/config
+      - ${RUTORRENT_CONFIG}:/config
       - ${DOWNLOAD_DIR}:/downloads
     environment:
       PGID: ${PGID}
@@ -50,6 +41,7 @@ services:
     expose:
       - "9117"
     environment:
+      JACKETT_KEY: ${JACKETT_KEY}
       PGID: ${PGID}
       PUID: ${PUID}
       TZ: ${TZ}
