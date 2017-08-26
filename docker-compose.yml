@@ -2,22 +2,26 @@ version: '2'
 
 services:
 
-  nginx:
-    image: linuxserver/nginx
-    restart: always
-    ports:
-      - "443:443"
-    volumes:
-      - ${NGINX_CONFIG}:/config
-      - ./nginx/default:/defaults/default
-      - ./nginx/default.d:/etc/nginx/default.d
+  traefik:
+    image: traefik
+    command:  --docker.domain=$DOMAIN
     environment:
-      PGID: ${PGID}
-      PUID: ${PUID}
-      TZ: ${TZ}
+      DOMAIN: $DOMAIN
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.toml:/traefik.toml
+      - ${TRAEFIK_CONFIG}:/config
 
   rutorrent:
     image: linuxserver/rutorrent
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend:rutorrent"
+      - "traefik.frontend.rule=Host:rutorrent.$DOMAIN"
     restart: always
     ports:
       - "51413:51413"
@@ -36,6 +40,10 @@ services:
 
   jackett:
     image: linuxserver/jackett
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend:jackett"
+      - "traefik.frontend.rule=Host:jackett.$DOMAIN"
     restart: always
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -51,6 +59,10 @@ services:
 
   sonarr:
     image: linuxserver/sonarr
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend:sonarr"
+      - "traefik.frontend.rule=Host:sonarr.$DOMAIN"
     restart: always
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -66,6 +78,10 @@ services:
 
   radarr:
     image: linuxserver/radarr
+    labels:
+      - "traefik.enable=true"
+      - "traefik.backend:radarr"
+      - "traefik.frontend.rule=Host:radarr.$DOMAIN"
     restart: always
     volumes:
       - /etc/localtime:/etc/localtime:ro
