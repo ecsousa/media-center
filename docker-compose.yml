@@ -4,6 +4,7 @@ services:
 
   nginx:
     image: linuxserver/nginx
+    restart: always
     ports:
       - "443:443"
     volumes:
@@ -17,6 +18,7 @@ services:
 
   rutorrent:
     image: linuxserver/rutorrent
+    restart: always
     ports:
       - "51413:51413"
       - "6881:6881/udp"
@@ -34,6 +36,7 @@ services:
 
   jackett:
     image: linuxserver/jackett
+    restart: always
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${JACKETT_CONFIG}:/config
@@ -48,6 +51,7 @@ services:
 
   sonarr:
     image: linuxserver/sonarr
+    restart: always
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${SONARR_CONFIG}:/config
@@ -62,6 +66,7 @@ services:
 
   radarr:
     image: linuxserver/radarr
+    restart: always
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ${RADARR_CONFIG}:/config
