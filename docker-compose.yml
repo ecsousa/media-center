@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
 
@@ -20,7 +20,6 @@ services:
     image: linuxserver/rutorrent
     labels:
       - "traefik.enable=true"
-      - "traefik.backend:rutorrent"
       - "traefik.frontend.rule=Host:rutorrent.$DOMAIN"
     restart: always
     ports:
@@ -42,7 +41,6 @@ services:
     image: linuxserver/jackett
     labels:
       - "traefik.enable=true"
-      - "traefik.backend:jackett"
       - "traefik.frontend.rule=Host:jackett.$DOMAIN"
     restart: always
     volumes:
@@ -61,7 +59,6 @@ services:
     image: linuxserver/sonarr
     labels:
       - "traefik.enable=true"
-      - "traefik.backend:sonarr"
       - "traefik.frontend.rule=Host:sonarr.$DOMAIN"
     restart: always
     volumes:
@@ -80,7 +77,6 @@ services:
     image: linuxserver/radarr
     labels:
       - "traefik.enable=true"
-      - "traefik.backend:radarr"
       - "traefik.frontend.rule=Host:radarr.$DOMAIN"
     restart: always
     volumes:
