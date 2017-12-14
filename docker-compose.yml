@@ -4,7 +4,8 @@ services:
 
   traefik:
     image: traefik
-    command:  --docker.domain=$DOMAIN
+    command:  --docker.domain=$DOMAIN --acme.email=$ACME_EMAIL
+    restart: always
     environment:
       DOMAIN: $DOMAIN
     ports:
@@ -14,34 +15,33 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./traefik.toml:/traefik.toml
-      - ${TRAEFIK_CONFIG}:/config
+      - ${ACME_STORAGE}:/acme.json
 
-  rutorrent:
-    image: linuxserver/rutorrent
+  deluge:
+    image: linuxserver/deluge
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:rutorrent.$DOMAIN"
+      - "traefik.frontend.rule=Host:deluge,deluge.$DOMAIN"
     restart: always
+    tty: true
     ports:
-      - "51413:51413"
-      - "6881:6881/udp"
+    - "14765:14765"
+    #- "6881:6881/udp"
     expose:
-      - "80"
-      - "5000"
+      - "8112"
     volumes:
-      - ${RUTORRENT_CONFIG}:/config
+      - ${DELUGE_CONFIG}:/config
       - ${DOWNLOAD_DIR}:/downloads
     environment:
       PGID: ${PGID}
       PUID: ${PUID}
       TZ: ${TZ}
 
-
   jackett:
     image: linuxserver/jackett
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:jackett.$DOMAIN"
+      - "traefik.frontend.rule=Host:jackett,jackett.$DOMAIN"
     restart: always
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -59,7 +59,7 @@ services:
     image: linuxserver/sonarr
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:sonarr.$DOMAIN"
+      - "traefik.frontend.rule=Host:sonarr,sonarr.$DOMAIN"
     restart: always
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -78,6 +78,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.frontend.rule=Host:radarr.$DOMAIN"
+      - "traefik.frontend.rule=Host:radarr,radarr.$DOMAIN"
     restart: always
     volumes:
       - /etc/localtime:/etc/localtime:ro

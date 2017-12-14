@@ -1,5 +1,6 @@
 loglevel = "DEBUG"
 defaultEntryPoints = ["http", "https"]
+insecureskipverify = true
 
 [web]
 # Port for the status page
@@ -12,11 +13,7 @@ address = ":8080"
      entryPoint = "https"
    [entryPoints.https]
    address = ":443"
-     [[entryPoints.https.tls.certificates]]
-     CertFile = "/config/cert.crt"
-     KeyFile = "/config/cert.key"
-   [entryPoints.https.auth.basic]
-     UsersFile="/config/.htpasswd"
+     [entryPoints.https.tls]
 
 # Enable Docker configuration backend
 [docker]
@@ -24,3 +21,7 @@ endpoint = "unix:///var/run/docker.sock"
 watch = true
 exposedbydefault = false
 
+[acme]
+storage = "/acme.json"
+entryPoint = "https"
+onDemand = true
