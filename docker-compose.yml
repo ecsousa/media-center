@@ -1,27 +1,27 @@
-version: '3'
+version: '3.5'
 
 services:
 
-  traefik:
-    image: traefik
-    command:  --docker.domain=$DOMAIN --acme.email=$ACME_EMAIL
-    restart: always
-    environment:
-      DOMAIN: $DOMAIN
-    ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./traefik.toml:/traefik.toml
-      - ${ACME_STORAGE}:/acme.json
+# traefik:
+#   image: traefik
+#   command:  --docker.domain=$DOMAIN --acme.email=$ACME_EMAIL
+#   restart: always
+#   environment:
+#     DOMAIN: $DOMAIN
+#   ports:
+#     - "80:80"
+#     - "443:443"
+#     - "8080:8080"
+#   volumes:
+#     - /var/run/docker.sock:/var/run/docker.sock
+#     - ./traefik.toml:/traefik.toml
+#     - ${ACME_STORAGE}:/acme.json
 
   deluge:
     image: linuxserver/deluge
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:deluge,deluge.$DOMAIN"
+      - "traefik.frontend.rule=Host:deluge.$DOMAIN"
     restart: always
     tty: true
     ports:
@@ -41,7 +41,7 @@ services:
     image: linuxserver/jackett
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:jackett,jackett.$DOMAIN"
+      - "traefik.frontend.rule=Host:jackett.$DOMAIN"
     restart: always
     volumes:
       - /etc/localtime:/etc/localtime:ro
@@ -78,7 +78,6 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.frontend.rule=Host:radarr.$DOMAIN"
-      - "traefik.frontend.rule=Host:radarr,radarr.$DOMAIN"
     restart: always
     volumes:
       - /etc/localtime:/etc/localtime:ro
