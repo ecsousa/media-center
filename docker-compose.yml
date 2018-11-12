@@ -59,7 +59,7 @@ services:
     image: linuxserver/sonarr
     labels:
       - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:sonarr,sonarr.$DOMAIN"
+      - "traefik.frontend.rule=Host:sonarr.$DOMAIN"
     restart: always
     volumes:
       - /etc/localtime:/etc/localtime:ro
