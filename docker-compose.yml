@@ -91,3 +91,21 @@ services:
       PUID: ${PUID}
       TZ: ${TZ}
 
+  bazarr:
+    image: linuxserver/bazarr
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:bazarr.$DOMAIN"
+    restart: always
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${BAZARR_CONFIG}:/config
+      - ${MOVIES_DIR}:/movies:nocopy
+      - ${TV_DIR}:/tv:nocopy
+    expose:
+      - "6767"
+    environment:
+      PGID: ${PGID}
+      PUID: ${PUID}
+      TZ: ${TZ}
+
